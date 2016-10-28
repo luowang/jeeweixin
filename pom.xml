@@ -252,8 +252,20 @@
             <artifactId>c3p0</artifactId>
             <version>0.9.1</version>
         </dependency>
-		
-		
+<!-- new 20161028 -->
+		<dependency>
+			<groupId>org.java-websocket</groupId>
+			<artifactId>Java-WebSocket</artifactId>
+			<version>1.3.0</version>
+		</dependency>
+
+		<dependency>
+			         <groupId>javax</groupId>
+			         <artifactId>javaee-api</artifactId>
+			         <version>7.0</version>
+			         <scope>provided</scope>
+			 </dependency>
+
 	</dependencies>
 	
 	<build>
