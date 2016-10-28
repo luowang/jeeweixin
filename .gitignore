@@ -1,1 +1,15 @@
 /target/
+
+*.class
+*.jar
+*.war
+*.ear
+
+*.gitignore
+.settings
+.project
+.classpath
+.myeclipse
+.mymetadata
+.idea
+*.iml
