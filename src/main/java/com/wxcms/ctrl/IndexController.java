@@ -10,6 +10,9 @@ public class IndexController {
 	@RequestMapping(value = "/index")
 	public ModelAndView index(){
 		return new ModelAndView("index");
-//		return new ModelAndView("redirect:/wxcms/urltoken.html");
+	}
+	@RequestMapping(value = "/back/index")
+	public ModelAndView backIndex(){
+		return new ModelAndView("redirect:/wxcms/urltoken.html");
 	}
 }
