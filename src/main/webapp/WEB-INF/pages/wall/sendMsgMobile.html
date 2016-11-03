@@ -14,7 +14,7 @@
 </head>
 <body>
 <div id="weuipanel" class="weui-panel">
-    <div id="message" class="weui-panel__hd">消息上墙--大屏幕</div>
+    <div id="message" style="margin-bottom: 50px;" class="weui-panel__hd">消息上墙--大屏幕</div>
 </div>
 <div class="weui-cell weui-cell_vcode" style="position: fixed;z-index: 10;bottom: 0;left: 0;right: 0;">
     <div class="weui-cell__bd">
@@ -91,6 +91,7 @@
     function send() {
         var message = document.getElementById('text').value;
         websocket.send(message);
+        document.getElementById('text').value='';
     }
 </script>
 </html>
