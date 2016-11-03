@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <#include "../common/wx.html">
+    <title>Java后端WebSocket的Tomcat实现</title>
+
+     <style type="text/css">
+         #weuipanel .weui-panel:after,#weuipanel .weui-panel__hd:after,#weuipanel:after{
+             content:normal;
+         }
+     </style>
+</head>
+<body>
+<div id="weuipanel" class="weui-panel">
+    <div id="message" class="weui-panel__hd">消息上墙--大屏幕</div>
+</div>
+<div class="weui-cell weui-cell_vcode" style="position: fixed;z-index: 10;bottom: 0;left: 0;right: 0;">
+    <div class="weui-cell__bd">
+        <input class="weui-input" style="height: 40px" id="text" type="text" placeholder="请输入文本">
+    </div>
+    <div class="weui-cell__ft">
+        <button class="weui-btn weui-btn_mini weui-btn_primary" onclick="send()">发送消息</button>
+        <!--<a href="javascript:;" class="weui-vcode-btn">获取验证码</a>-->
+    </div>
+</div>
+<!--<button onclick="closeWebSocket()">关闭WebSocket连接</button>-->
+</body>
+<script id="template" type="text/x-jquery-tmpl">
+    <div class="weui-panel__bd">
+        <div class="weui-media-box weui-media-box_text">
+            <h4 class="weui-media-box__title"><%= headPhoto %></h4>
+            <p class="weui-media-box__desc"><%= msg %></p>
+        </div>
+    </div>
+</script>
+<script type="text/javascript">
+    var websocket = null;
+    var sessionId = 0;
+    //判断当前浏览器是否支持WebSocket
+    if ('WebSocket' in window) {
+        websocket = new WebSocket("ws://localhost:8111/websocket");
+    }
+    else {
+        alert('当前浏览器 Not support websocket')
+    }
+
+    //连接发生错误的回调方法
+    websocket.onerror = function () {
+        setMessageInnerHTML("WebSocket连接发生错误");
+    };
+
+    //连接成功建立的回调方法
+    websocket.onopen = function () {
+//        websocket.send(window.location.href);
+//        websocket.send("client:sendMsg:123");
+        setMessageInnerHTML("WebSocket连接成功");
+    }
+
+    //接收到消息的回调方法
+    websocket.onmessage = function (event) {
+        setMessageInnerHTML(event.data);
+        //server:sendId:12
+        sessionId=event.data;
+    }
+
+    //连接关闭的回调方法
+    websocket.onclose = function () {
+        setMessageInnerHTML("WebSocket连接关闭");
+    }
+
+    //监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
+    window.onbeforeunload = function () {
+        closeWebSocket();
+    }
+
+    //将消息显示在网页上
+    function setMessageInnerHTML(msg) {
+        var template=$('#template').html();
+        var result=ejs.render(template, {msg:msg,headPhoto:"这是头像"});
+        $( "#message" ).append(result);
+    }
+
+    //关闭WebSocket连接
+    function closeWebSocket() {
+        websocket.close();
+    }
+
+    //发送消息
+    function send() {
+        var message = document.getElementById('text').value;
+        websocket.send(message);
+    }
+</script>
+</html>
