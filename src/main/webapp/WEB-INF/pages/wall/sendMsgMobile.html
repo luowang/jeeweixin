@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <#include "../common/wx.html">
+    <#include "../common/wx.html"/>
     <title>Java后端WebSocket的Tomcat实现</title>
 
      <style type="text/css">
@@ -15,16 +15,17 @@
 <body>
 <div id="weuipanel" class="weui-panel">
     <div id="message" style="margin-bottom: 50px;" class="weui-panel__hd">消息上墙--大屏幕</div>
-</div>
-<div class="weui-cell weui-cell_vcode" style="position: fixed;z-index: 10;bottom: 0;left: 0;right: 0;">
-    <div class="weui-cell__bd">
-        <input class="weui-input" style="height: 40px" id="text" type="text" placeholder="请输入文本">
+    <div class="weui-cell weui-cell_vcode" style="position: fixed;z-index: 10;bottom: 0;left: 0;right: 0;background-color:#FFFFFF;">
+        <div class="weui-cell__bd">
+            <input class="weui-input" style="height: 40px" id="text" type="text" placeholder="请输入文本">
+        </div>
+        <div class="weui-cell__ft">
+            <button class="weui-btn weui-btn_mini weui-btn_primary" onclick="send()">发送消息</button>
+            <!--<a href="javascript:;" class="weui-vcode-btn">获取验证码</a>-->
+        </div>
     </div>
-    <div class="weui-cell__ft">
-        <button class="weui-btn weui-btn_mini weui-btn_primary" onclick="send()">发送消息</button>
-        <!--<a href="javascript:;" class="weui-vcode-btn">获取验证码</a>-->
-    </div>
 </div>
+
 <!--<button onclick="closeWebSocket()">关闭WebSocket连接</button>-->
 </body>
 <script id="template" type="text/x-jquery-tmpl">
@@ -80,6 +81,7 @@
         var template=$('#template').html();
         var result=ejs.render(template, {msg:msg,headPhoto:"这是头像"});
         $( "#message" ).append(result);
+        setScrollTop(document.getElementById('message').scrollHeight);
     }
 
     //关闭WebSocket连接
@@ -92,6 +94,15 @@
         var message = document.getElementById('text').value;
         websocket.send(message);
         document.getElementById('text').value='';
+    }
+
+    /**
+     *设置scrollTop的值，兼容所有浏览器
+     */
+    function setScrollTop(scroll_top) {
+        document.documentElement.scrollTop = scroll_top;
+        window.pageYOffset = scroll_top;
+        document.body.scrollTop = scroll_top;
     }
 </script>
 </html>
