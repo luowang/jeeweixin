@@ -2,34 +2,15 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <#include "../common/wall.html"/>
+    <title>Java后端WebSocket的Tomcat实现</title>
 </head>
 <body>
-<!--<input id="text" type="text"/>-->
-<!--<button onclick="send()">发送消息</button>-->
-<ul style="width: 60%;margin: 10% auto auto auto;">
-    <li>
-        <div class="panel panel-default" style="height: 100px">
-            <div id="message" class="panel-body">
-            </div>
-        </div>
-    </li>
-    <li>
-        <div class="panel panel-default" style="height: 100px">
-            <div id="message1" class="panel-body">
-            </div>
-        </div>
-    </li>
-    <li>
-        <div class="panel panel-default" style="height: 100px">
-            <div id="message2" class="panel-body">
-            </div>
-        </div>
-    </li>
-</ul>
-
-
+Welcome<br/><input id="text" type="text"/>
+<button onclick="send()">发送消息</button>
+<hr/>
+<button onclick="closeWebSocket()">关闭WebSocket连接</button>
+<hr/>
+<div id="message"></div>
 </body>
 
 <script type="text/javascript">
@@ -37,7 +18,7 @@
     var sessionId = 0;
     //判断当前浏览器是否支持WebSocket
     if ('WebSocket' in window) {
-        websocket = new WebSocket("ws://"+window.location.hostname+"/websocket/aaaa/ssss");
+        websocket = new WebSocket("ws://localhost:8111/websocket");
     }
     else {
         alert('当前浏览器 Not support websocket')
@@ -50,6 +31,8 @@
 
     //连接成功建立的回调方法
     websocket.onopen = function () {
+        websocket.send(window.location.href);
+        websocket.send("client:sendMsg:123");
         setMessageInnerHTML("WebSocket连接成功");
     }
 
@@ -72,9 +55,7 @@
 
     //将消息显示在网页上
     function setMessageInnerHTML(innerHTML) {
-        $(document.getElementById('message')).html(innerHTML);
-        $(document.getElementById('message1')).html(innerHTML);
-        $(document.getElementById('message2')).html(innerHTML);
+        document.getElementById('message').innerHTML += innerHTML + '<br/>';
     }
 
     //关闭WebSocket连接

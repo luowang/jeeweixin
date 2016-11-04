@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.wxcms.mapper.*;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -28,11 +29,7 @@ import com.wxcms.domain.AccountMenu;
 import com.wxcms.domain.MsgBase;
 import com.wxcms.domain.MsgNews;
 import com.wxcms.domain.MsgText;
-import com.wxcms.mapper.AccountFansDao;
-import com.wxcms.mapper.AccountMenuDao;
-import com.wxcms.mapper.AccountMenuGroupDao;
-import com.wxcms.mapper.MsgBaseDao;
-import com.wxcms.mapper.MsgNewsDao;
+
 /**
  * 业务消息处理
  * 开发者根据自己的业务自行处理消息的接收与回复；
@@ -46,7 +43,10 @@ public class MyServiceImpl implements MyService{
 	
 	@Autowired
 	private MsgNewsDao msgNewsDao;
-	
+
+	@Autowired
+	private MsgTextDao msgTextDao;
+
 	@Autowired
 	private AccountMenuDao menuDao;
 	
@@ -60,8 +60,6 @@ public class MyServiceImpl implements MyService{
 	 * 处理消息
 	 * 开发者可以根据用户发送的消息和自己的业务，自行返回合适的消息；
 	 * @param msgRequest : 接收到的消息
-	 * @param appId ： appId
-	 * @param appSecret : appSecret
 	 */
 	public String processMsg(MsgRequest msgRequest,MpAccount mpAccount){
 		String msgtype = msgRequest.getMsgType();//接收到的消息类型
@@ -99,6 +97,10 @@ public class MyServiceImpl implements MyService{
 		String content = msgRequest.getContent();
 		if(!StringUtils.isEmpty(content)){//文本消息
 			String tmpContent = content.trim();
+			MsgText randomMsg = msgTextDao.getRandomMsg(tmpContent);
+			if(null!=randomMsg){
+				return MsgXmlUtil.textToXml(WxMessageBuilder.getMsgResponseText(msgRequest, randomMsg));
+			}
 			List<MsgNews> msgNews = msgNewsDao.getRandomMsgByContent(tmpContent,mpAccount.getMsgcount());
 			if(!CollectionUtils.isEmpty(msgNews)){
 				return MsgXmlUtil.newsToXml(WxMessageBuilder.getMsgResponseNews(msgRequest, msgNews));

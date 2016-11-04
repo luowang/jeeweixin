@@ -1,9 +1,12 @@
 package com.wall.biz.ctrl;
 
+import com.wxapi.process.WxMemoryCacheClient;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 手机端发送上墙消息
@@ -15,9 +18,10 @@ import org.springframework.web.servlet.ModelAndView;
 public class WallController {
 
     @RequestMapping(value = "/sendMsgMobile/{activityId}")
-    public ModelAndView sendMsgMobile(@PathVariable String activityId ){
+    public ModelAndView sendMsgMobile(@PathVariable String activityId ,HttpServletRequest request){
         ModelAndView mv = new ModelAndView("wall/sendMsgMobile");
         mv.addObject("activityId",activityId);
+        String openid = WxMemoryCacheClient.getOpenid(request.getSession().getId());
         return mv;
     }
     @RequestMapping(value = "/show/{activityId}")

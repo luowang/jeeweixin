@@ -14,6 +14,7 @@
 </head>
 <body>
 <div id="weuipanel" class="weui-panel">
+    <input id="_aid"  name="_aid" type="text" value="${activityId}" hidden="hidden"/>
     <div id="message" style="margin-bottom: 50px;" class="weui-panel__hd">消息上墙--大屏幕</div>
     <div class="weui-cell weui-cell_vcode" style="position: fixed;z-index: 10;bottom: 0;left: 0;right: 0;background-color:#FFFFFF;">
         <div class="weui-cell__bd">
@@ -37,11 +38,13 @@
     </div>
 </script>
 <script type="text/javascript">
+    var aid = window.location.href.split('sendMsgMobile/')[1].split('.html')[0];
     var websocket = null;
     var sessionId = 0;
     //判断当前浏览器是否支持WebSocket
     if ('WebSocket' in window) {
-        websocket = new WebSocket("ws://localhost:8111/websocket");
+//        websocket = new WebSocket("ws://"+window.location.hostname+"/websocket/"+aid+"/ssss");
+        websocket = new WebSocket("ws://"+window.location.hostname+"/websocket/"+$('#_aid').val()+"/ssss");
     }
     else {
         alert('当前浏览器 Not support websocket')
