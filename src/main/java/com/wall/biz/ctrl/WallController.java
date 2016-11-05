@@ -22,6 +22,7 @@ public class WallController {
         ModelAndView mv = new ModelAndView("wall/sendMsgMobile");
         mv.addObject("activityId",activityId);
         String openid = WxMemoryCacheClient.getOpenid(request.getSession().getId());
+        mv.addObject("openid",openid);
         return mv;
     }
     @RequestMapping(value = "/show/{activityId}")

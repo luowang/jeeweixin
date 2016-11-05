@@ -105,6 +105,7 @@
 	        			<list> 
 							<value>/wxweb/sendmsg.html</value>
 							<value>/wxapi/oauthOpenid.html</value>
+							<value>/wall/sendMsgMobile/</value>
 						</list>
 	        		</property>
 	        	</bean>
