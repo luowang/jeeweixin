@@ -5,8 +5,17 @@ package com.core.server;
  * @date 2016/10/28 15:50
  */
 
+import com.wxapi.process.MpAccount;
+import com.wxapi.process.WxMemoryCacheClient;
+import com.wxapi.service.MyService;
+import com.wxapi.service.impl.MyServiceImpl;
+import com.wxcms.domain.AccountFans;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
@@ -20,6 +29,9 @@ import java.util.concurrent.CopyOnWriteArraySet;
  */
 @ServerEndpoint("/websocket/{activityId}/{openId}")
 public class WebSocketServer {
+    @Autowired
+    private MyServiceImpl myService;
+
     //静态变量，用来记录当前在线连接数。应该把它设计成线程安全的。
     private static int onlineCount = 0;
 
@@ -87,6 +99,8 @@ public class WebSocketServer {
     public void onMessage(@PathParam("activityId") String activityId,@PathParam("openId") String openId,
                           String message, Session session) {
         System.out.println("来自客户端的消息:" + message);
+        MpAccount mpAccount = WxMemoryCacheClient.getSingleMpAccount();//获取缓存中的唯一账号
+        AccountFans accountFans = myService.getFansByOpenId(openId, mpAccount);
 
         StringBuffer sb = new StringBuffer();
         sb.append("发送内容：").append(message).append(";");
