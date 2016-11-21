@@ -12,8 +12,10 @@ import com.wxapi.service.impl.MyServiceImpl;
 import com.wxcms.domain.AccountFans;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.ContextLoader;
 
 import javax.annotation.Resource;
 import javax.websocket.*;
@@ -27,6 +29,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
  * @ServerEndpoint 注解是一个类层次的注解，它的功能主要是将目前的类定义成一个websocket服务器端,
  * 注解的值将被用于监听用户连接的终端访问URL地址,客户端可以通过这个URL来连接到WebSocket服务器端
  */
+@Component
 @ServerEndpoint("/websocket/{activityId}/{openId}")
 public class WebSocketServer {
     @Autowired
@@ -100,12 +103,21 @@ public class WebSocketServer {
                           String message, Session session) {
         System.out.println("来自客户端的消息:" + message);
         MpAccount mpAccount = WxMemoryCacheClient.getSingleMpAccount();//获取缓存中的唯一账号
-        AccountFans accountFans = myService.getFansByOpenId(openId, mpAccount);
 
+        HashMap<String, String> maps = new HashMap<String, String>();
+        maps.put("","");
         StringBuffer sb = new StringBuffer();
         sb.append("发送内容：").append(message).append(";");
         sb.append("activityId：").append(activityId).append(";");
         sb.append("openId：").append(openId).append(";");
+        myService= (MyServiceImpl)ContextLoader.getCurrentWebApplicationContext().getBean("myService");
+        AccountFans accountFans = myService.getFansByOpenId(openId, mpAccount);
+        if(null!=accountFans){
+            String headimgurl = accountFans.getHeadimgurl();//头像
+            sb.append("headimgurl:").append(headimgurl);
+            String nicknameStr = accountFans.getNicknameStr();//昵称
+            sb.append("nicknameStr:").append(nicknameStr);
+        }
         //群发消息
         for(WebSocketServer item: webSocketSet){
             try {

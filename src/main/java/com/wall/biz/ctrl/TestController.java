@@ -1,11 +1,15 @@
 package com.wall.biz.ctrl;
 
+import net.sf.json.JSONObject;
+import org.apache.shiro.crypto.hash.Hash;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
 import javax.annotation.Resource;
+import javax.json.JsonObject;
+import java.util.HashMap;
 
 /**
  * @author: wang.luo
@@ -26,5 +30,14 @@ public class TestController {
         System.out.println("---》》》》"+mmm);
         jedisPool.returnResource(jedis);
         return mmm;
+    }
+
+    public static void main(String[] args) {
+        HashMap<String, String> map = new HashMap<String, String>();
+        map.put("1","q");
+        map.put("2","w");
+        JSONObject json = JSONObject.fromObject(map);
+        String str = json.toString();
+        System.out.println(str);
     }
 }

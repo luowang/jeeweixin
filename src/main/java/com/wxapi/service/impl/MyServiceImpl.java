@@ -35,7 +35,7 @@ import com.wxcms.domain.MsgText;
  * 开发者根据自己的业务自行处理消息的接收与回复；
  */
 
-@Service
+@Service("myService")
 public class MyServiceImpl implements MyService{
 
 	@Autowired
