@@ -10,6 +10,7 @@ import com.wxapi.process.WxMemoryCacheClient;
 import com.wxapi.service.MyService;
 import com.wxapi.service.impl.MyServiceImpl;
 import com.wxcms.domain.AccountFans;
+import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -103,25 +104,24 @@ public class WebSocketServer {
                           String message, Session session) {
         System.out.println("来自客户端的消息:" + message);
         MpAccount mpAccount = WxMemoryCacheClient.getSingleMpAccount();//获取缓存中的唯一账号
-
-        HashMap<String, String> maps = new HashMap<String, String>();
-        maps.put("","");
-        StringBuffer sb = new StringBuffer();
-        sb.append("发送内容：").append(message).append(";");
-        sb.append("activityId：").append(activityId).append(";");
-        sb.append("openId：").append(openId).append(";");
+        // 组装消息对象
+        HashMap<String, String> map = new HashMap<String, String>();
+        map.put("message",message);
+        map.put("activityId",activityId);
+        map.put("openId",openId);
         myService= (MyServiceImpl)ContextLoader.getCurrentWebApplicationContext().getBean("myService");
         AccountFans accountFans = myService.getFansByOpenId(openId, mpAccount);
         if(null!=accountFans){
             String headimgurl = accountFans.getHeadimgurl();//头像
-            sb.append("headimgurl:").append(headimgurl);
+            map.put("headimgurl",headimgurl);
             String nicknameStr = accountFans.getNicknameStr();//昵称
-            sb.append("nicknameStr:").append(nicknameStr);
+            map.put("nicknameStr",nicknameStr);
         }
+        JSONObject json = JSONObject.fromObject(map);
         //群发消息
         for(WebSocketServer item: webSocketSet){
             try {
-                item.sendMessage(sb.toString());
+                item.sendMessage(json.toString());
             } catch (IOException e) {
                 e.printStackTrace();
                 continue;

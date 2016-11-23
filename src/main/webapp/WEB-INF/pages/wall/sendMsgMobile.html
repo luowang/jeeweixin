@@ -33,9 +33,8 @@
 <script id="template" type="text/x-jquery-tmpl">
     <div class="weui-panel__bd">
         <div class="weui-media-box weui-media-box_text">
-            <img src="<%= img %>"/>
-            <h4 class="weui-media-box__title"><%= headPhoto %></h4>
-            <p class="weui-media-box__desc"><%= msg %></p>
+            <img style="width: 50px" src="<%= imgTemp %>"/>
+            <p class="weui-media-box__desc"><%= msgTemp %></p>
         </div>
     </div>
 </script>
@@ -85,7 +84,7 @@
     function setMessageInnerHTML(msg) {
         var data = JSON.parse(msg);
         var template=$('#template').html();
-        var result=ejs.render(template, {msg:msg,headPhoto:"这是头像",img:data.headimgurl});
+        var result=ejs.render(template, {msgTemp:data.message,imgTemp:data.headimgurl});
         $( "#message" ).append(result);
         setScrollTop(document.getElementById('message').scrollHeight);
     }
