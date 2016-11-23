@@ -11,6 +11,14 @@
              content:normal;
          }
      </style>
+
+    <link rel="stylesheet" type="text/css" href="${s.base}/css/jscrollpane1.css" />
+    <!--引用jquery-1.4.2.min.js会影响添加表情，不引用jquery-1.4.2.min.js就不支持IE、火狐浏览器的鼠标滚轮插件-->
+    <!-- the mousewheel plugin -->
+    <script type="text/javascript" src="${s.base}/js/jquery.mousewheel.js"></script>
+    <!-- the jScrollPane script -->
+    <script type="text/javascript" src="${s.base}/js/jquery.jscrollpane.min.js"></script>
+    <script type="text/javascript" src="${s.base}/js/scroll-startstop.events.jquery.js"></script>
 </head>
 <body>
 <div id="weuipanel" class="weui-panel">
@@ -37,6 +45,39 @@
             <p class="weui-media-box__desc"><%= msgTemp %></p>
         </div>
     </div>
+	<div class="talk_record">
+		<div id="jp-container" class="jp-container">
+			<div class="talk_recordboxme">
+				<div class="user"><img src="${s.base}/img/thumbs/15.jpg"/>美美</div>
+				<div class="talk_recordtextbg">&nbsp;</div>
+				<div class="talk_recordtext">
+					<h3>我的问题是：1+1=？</h3>
+					<span class="talk_time">2014-09-15 15:06</span>
+				</div>
+			</div>
+
+			<div class="talk_recordbox">
+				<div class="user"><img src="${s.base}/img/thumbs/11.jpg"/>壮壮</div>
+				<div class="talk_recordtextbg">&nbsp;</div>
+				<div class="talk_recordtext">
+					<h3>对方的回答是：1+1=2</h3>
+					<span class="talk_time">2014-09-15 15:06</span>
+				</div>
+			</div>
+
+			<div class="talk_recordboxme">
+				<div class="user"><img src="${s.base}/img/thumbs/15.jpg"/>美美</div>
+				<div class="talk_recordtextbg">&nbsp;</div>
+				<div class="talk_recordtext">
+					<h3>我的问题是：1+1真的等于2吗？不会是等于3吧</h3>
+					<span class="talk_time">2014-09-15 15:06</span>
+				</div>
+			</div>
+
+		</div>
+
+	</div>
+
 </script>
 <script type="text/javascript">
 //    var aid = window.location.href.split('sendMsgMobile/')[1].split('.html')[0];
